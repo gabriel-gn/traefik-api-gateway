@@ -42,6 +42,9 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
-      - "traefik.http.routers.nginx.rule=Host(`site.localhost`)"
+      # TODO adicionar o host dinamicamente
+      - "traefik.http.routers.nginx.rule=Host(`localhost`) && PathPrefix(`/home`)"
+      - "traefik.http.routers.nginx.middlewares=strip-nginx"
+      - "traefik.http.middlewares.strip-nginx.stripprefix.prefixes=/home"
     networks:
       - proxy

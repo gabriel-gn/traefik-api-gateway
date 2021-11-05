@@ -1,0 +1,25 @@
+# https://github.com/liyuntao/kong-init
+services:
+  - name: servicea
+    url: http://servicea:8081
+  - name: serviceb
+      url: http://serviceb:8082
+  - name: servicec
+      url: http://serviceb:8083
+
+routes:
+  - name: servicea_index
+    apply_to: servicea
+    config:
+      paths: ["/a"]
+      strip_path: false
+  - name: serviceb_index
+      apply_to: serviceb
+      config:
+        paths: [ "/b" ]
+        strip_path: false
+  - name: servicec_index
+      apply_to: servicec
+      config:
+        paths: [ "/c" ]
+        strip_path: false

@@ -1,0 +1,22 @@
+api:
+  dashboard: true
+  insecure: true
+
+entryPoints:
+  http:
+    address: :80
+  https:
+    address: :443
+
+providers:
+  docker:
+    exposedbydefault: false
+    network: proxy
+    watch: true
+
+  file:
+    filename: /etc/traefik/routes.yml
+    watch: true
+
+docker:
+  network: traefik

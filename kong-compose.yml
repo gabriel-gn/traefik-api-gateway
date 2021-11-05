@@ -93,9 +93,9 @@ services:
       - proxy
     ports:
       - "8000:8000/tcp"
-      - "127.0.0.1:8001:8001/tcp"
+      - "8001:8001/tcp"
       - "8443:8443/tcp"
-      - "127.0.0.1:8444:8444/tcp"
+      - "8444:8444/tcp"
     healthcheck:
       test: ["CMD", "kong", "health"]
       interval: 10s
@@ -104,7 +104,9 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
-      - "traefik.http.routers.kong-api.rule=Host(`api.localhost`)"
+      - "traefik.http.routers.kong.rule=Host(`localhost`) && PathPrefix(`/gate`)"
+      - "traefik.http.routers.kong.middlewares=strip-kong"
+      - "traefik.http.middlewares.strip-kong.stripprefix.prefixes=/gate"
     restart: on-failure
     deploy:
       restart_policy:
@@ -133,11 +135,14 @@ services:
       TOKEN_SECRET: ahfdjgjgf79JKLFHJKh978953kgdfjkl
       DB_DATABASE: konga_db
       NODE_ENV: production
+      BASE_URL: "/konga/"
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
-      - "traefik.http.routers.konga.rule=Host(`konga.localhost`)"
+      - "traefik.http.routers.konga.rule=Host(`localhost`) && PathPrefix(`/konga`)"
+      - "traefik.http.routers.konga.middlewares=strip-konga"
+      - "traefik.http.middlewares.strip-konga.stripprefix.prefixes=/konga"
     depends_on:
       - kong-db
-    ports:
-      - "1337:1337"
+    expose:
+      - "1337"

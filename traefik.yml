@@ -1,5 +1,6 @@
 api:
   dashboard: true
+  # The Web UI (enabled by --api.insecure=true)
   insecure: true
 
 entryPoints:

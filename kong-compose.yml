@@ -1,7 +1,7 @@
 version: '3.8'
 
-volumes:
-  kong_data: {}
+#volumes:
+#  kong_data: {}
 
 networks:
   kong-net:
@@ -32,8 +32,8 @@ services:
     tty: true
     networks:
       - kong-net
-    # volumes:
-    #   - kong_data:/var/lib/postgresql/data
+#    volumes:
+#      - kong_data:/var/lib/postgresql/data
 
   kong-migrations:
     image: "kong:2.3.2-alpine"
@@ -119,6 +119,7 @@ services:
     depends_on:
       - kong-db
       - kong-migrations
+      - kong-migrations-up
       - kong
     volumes:
       - ./kong:/etc/kong-init/:ro
@@ -134,7 +135,7 @@ services:
       - kong-net
     restart: on-failure
     depends_on:
-      - kong-db
+      - kong-init
 
   konga:
     image: pantsel/konga:latest
@@ -162,6 +163,6 @@ services:
       - "traefik.http.routers.konga.middlewares=strip-konga"
       - "traefik.http.middlewares.strip-konga.stripprefix.prefixes=/konga"
     depends_on:
-      - kong-db
+      - konga-prepare
     expose:
       - "1337"

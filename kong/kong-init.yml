@@ -3,23 +3,30 @@ services:
   - name: servicea
     url: http://servicea:8081
   - name: serviceb
-      url: http://serviceb:8082
+    url: http://serviceb:8082
   - name: servicec
-      url: http://serviceb:8083
+    url: http://serviceb:8083
+  - name: sso
+    url: http://sso:80
 
 routes:
   - name: servicea_index
     apply_to: servicea
     config:
       paths: ["/a"]
-      strip_path: false
+      strip_path: true
   - name: serviceb_index
-      apply_to: serviceb
-      config:
-        paths: [ "/b" ]
-        strip_path: false
+    apply_to: serviceb
+    config:
+      paths: [ "/b" ]
+      strip_path: true
   - name: servicec_index
-      apply_to: servicec
-      config:
-        paths: [ "/c" ]
-        strip_path: false
+    apply_to: servicec
+    config:
+      paths: [ "/c" ]
+      strip_path: true
+  - name: sso_index
+    apply_to: sso
+    config:
+      paths: [ "/sso" ]
+      strip_path: true
